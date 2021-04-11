@@ -3,7 +3,7 @@ import Sidebar from "../components/Sidebar"
 
 export default function Home() {
   return (
-    <div>
+    <div className="grid grid-cols-10 min-h-screen bg-gray-200">
       <Head>
         <title>Next WhatsApp</title>
         <link rel="icon" href="/favicon.ico" />
