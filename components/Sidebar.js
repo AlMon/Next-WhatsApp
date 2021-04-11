@@ -1,4 +1,5 @@
 import * as EmailValidator from "email-validator"
+import { auth, db } from "../config/firebase"
 
 function Sidebar() {
   const createChat = () => {
@@ -10,18 +11,36 @@ function Sidebar() {
 
     if (EmailValidator.validate(input)) {
       //CHAT To-Do
+      db.collection("chats").add({})
     }
   }
 
   return (
     <div className="col-span-2">
-      <div className="text-center">
+      <div className="flex justify-center items-center">
         <button
-          className="w-1/2 my-3 text-white font-medium rounded-full bg-blue-500 h-12"
+          className="w-1/2 my-3 text-white font-medium rounded-full bg-green-500 h-12"
           onClick={createChat}
         >
           New Chat
         </button>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6 text-green-500 ml-10 cursor-pointer"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          onClick={() => {
+            auth.signOut()
+          }}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+          />
+        </svg>
       </div>
       <div className="relative mb-3">
         <svg

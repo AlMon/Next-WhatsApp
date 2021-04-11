@@ -1,13 +1,18 @@
 import Head from "next/head"
+import { auth, provider } from "../config/firebase"
 
 function Login() {
+  const signIn = () => {
+    auth.signInWithPopup(provider).catch(alert)
+  }
+
   return (
     <div>
       <Head>
         <title>Next WhatsApp - Log In</title>
       </Head>
 
-      <div className="min-w-screen min-h-screen bg-green-200 flex items-center justify-center px-5 py-5">
+      <div className="min-w-screen min-h-screen bg-gray-200 flex items-center justify-center px-5 py-5">
         <div
           className="bg-white text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden"
           style={{ maxWidth: 1000 }}
@@ -27,7 +32,10 @@ function Login() {
                 </h1>
                 <p>You can use your Gmail account, it takes 5 seconds!</p>
               </div>
-              <button className="flex w-full mx-auto max-w-xs justify-center bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg px-3 py-3 font-semibold">
+              <button
+                onClick={signIn}
+                className="flex w-full mx-auto max-w-xs justify-center bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg px-3 py-3 font-semibold"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6 mr-2"
