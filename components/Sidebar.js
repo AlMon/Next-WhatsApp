@@ -1,19 +1,40 @@
 import * as EmailValidator from "email-validator"
+import { useAuthState } from "react-firebase-hooks/auth"
+import { useCollection } from "react-firebase-hooks/firestore"
 import { auth, db } from "../config/firebase"
+import Chat from "./Chat"
 
 function Sidebar() {
+  const [user] = useAuthState(auth)
+  const userChatRef = db
+    .collection("chats")
+    .where("users", "array-contains", user.email)
+
+  const [chatsSnapshot] = useCollection(userChatRef)
+
   const createChat = () => {
     const input = prompt(
-      "Please enter a Gmail adress for the person you want to chat with"
+      "Please enter the Gmail adress of the person you want to chat with"
     )
 
     if (!input) return null
 
-    if (EmailValidator.validate(input)) {
-      //CHAT To-Do
-      db.collection("chats").add({})
+    if (
+      EmailValidator.validate(input) &&
+      !chatAlreadyExists(input) &&
+      input !== user.email
+    ) {
+      db.collection("chats").add({
+        users: [user.email, input],
+      })
     }
   }
+
+  const chatAlreadyExists = (recipientEmail) =>
+    !!chatsSnapshot?.docs.find(
+      (chat) =>
+        chat.data().users.find((user) => user === recipientEmail)?.length > 0
+    )
 
   return (
     <div className="col-span-2">
@@ -42,6 +63,10 @@ function Sidebar() {
           />
         </svg>
       </div>
+
+      {chatsSnapshot?.docs.map((chat) => (
+        <Chat key={chat.id} id={chat.id} users={chat.data().users} />
+      ))}
       <div className="relative mb-3">
         <svg
           xmlns="http://www.w3.org/2000/svg"
